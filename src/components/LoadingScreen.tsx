@@ -1,19 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Heart } from 'lucide-react';
-// OPTIONAL: if you have LanguageContext
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface LoadingScreenProps {
   onComplete: () => void;
-
-  /** Optional enhancements */
-  durationMs?: number; // total loading duration
-  step?: number;       // progress increment
+  durationMs?: number;
+  step?: number;
 }
 
 const DEFAULT_DURATION = 3000;
 const DEFAULT_STEP = 2;
-const INTERVAL_MS = 30;
 
 const LoadingScreen: React.FC<LoadingScreenProps> = ({
   onComplete,
@@ -22,27 +18,24 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
 }) => {
   const [progress, setProgress] = useState(0);
 
-  // i18n (fallback safe)
-  let appName = 'स्वास्थ्य साथी';
-  let loadingText = 'Loading';
+  // ✅ Correct hook usage (no try/catch)
+  const language = useLanguage();
 
-  try {
-    const { t } = useLanguage();
-    appName = t.appName;
-    loadingText = t.loading;
-  } catch {
-    // LanguageProvider not mounted yet → fallback
-  }
+  const appName = language?.t?.appName ?? 'स्वास्थ्य साथी';
+  const loadingText = language?.t?.loading ?? 'Loading';
 
-  // Reduced motion preference
-  const prefersReducedMotion = useMemo(
-    () =>
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-    []
-  );
+  const prefersReducedMotion = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }, []);
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setProgress(100);
+      onComplete();
+      return;
+    }
+
     const totalSteps = 100 / step;
     const intervalTime = durationMs / totalSteps;
 
@@ -55,21 +48,21 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
         }
         return Math.min(prev + step, 100);
       });
-    }, intervalTime || INTERVAL_MS);
+    }, intervalTime);
 
     return () => clearInterval(timer);
-  }, [onComplete, durationMs, step]);
+  }, [onComplete, durationMs, step, prefersReducedMotion]);
 
   return (
     <div
-      className="fixed inset-0 bg-primary flex flex-col items-center justify-center z-50"
+      className="fixed inset-0 bg-primary flex flex-col items-center justify-center z-50 text-white"
       aria-live="polite"
       aria-busy="true"
     >
       {/* Logo */}
       <div className="relative mb-8">
         <Heart
-          className={`w-20 h-20 text-white ${
+          className={`w-20 h-20 ${
             prefersReducedMotion ? '' : 'animate-pulse'
           }`}
           fill="white"
@@ -77,7 +70,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
       </div>
 
       {/* App Name */}
-      <h1 className="text-4xl font-bold text-white mb-8">{appName}</h1>
+      <h1 className="text-4xl font-bold mb-8">{appName}</h1>
 
       {/* Progress Bar */}
       <div className="w-64 bg-white/30 rounded-full h-2 overflow-hidden">
@@ -92,7 +85,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
       </div>
 
       {/* Loading Text */}
-      <p className="text-white mt-4 text-lg">{loadingText}...</p>
+      <p className="mt-4 text-lg">{loadingText}...</p>
     </div>
   );
 };
