@@ -109,11 +109,7 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-<<<<<<< HEAD
       <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
-=======
-      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
->>>>>>> 29ff43302fe1806590ec66ae53d3cdefd0d2b5e8
         <LanguageProvider>
           <AuthProvider>
             <CartProvider>
@@ -141,7 +137,6 @@ const App = () => {
                       <Route path="/edit-profile" element={<EditProfile />} />
                       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                       <Route path="/terms-and-conditions" element={<TermsConditions />} />
-                      <Route path="/reminders" element={<Reminders />} />
                       <Route path="/offers" element={<Offers />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
