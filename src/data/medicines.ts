@@ -77,7 +77,6 @@ export const medicines: Medicine[] = [
     image: 'https://healwell-homeo.com/cdn/shop/files/Antiseptic_432x.jpg?v=1722318520',
     category: 'first-aid',
     rating: 4.7,
-   
     inStock: true,
   },
   {
@@ -105,8 +104,7 @@ export const medicines: Medicine[] = [
     category: 'essentials',
     rating: 4.5,
     inStock: true,
-  
-
+  },
   {
     id: '9',
     name: 'Dettol',
@@ -120,7 +118,6 @@ export const medicines: Medicine[] = [
     rating: 4.6,
     inStock: true,
   },
-
   {
     id: '10',
     name: 'Eno',
@@ -134,7 +131,6 @@ export const medicines: Medicine[] = [
     rating: 4.6,
     inStock: true,
   },
-
   {
     id: '11',
     name: 'Vicks Inhaler',
@@ -148,9 +144,8 @@ export const medicines: Medicine[] = [
     rating: 4.4,
     inStock: true,
   },
-
   {
-    id: '10',
+    id: '10-2',
     name: 'Vitamin C Tablets',
     nameHi: 'विटामिन सी टैबलेट',
     description: 'For immunity and general health',
@@ -163,7 +158,7 @@ export const medicines: Medicine[] = [
     inStock: true,
   },
   {
-    id: '11',
+    id: '11-2',
     name: 'Multivitamin Capsules',
     nameHi: 'मल्टीविटामिन कैप्सूल',
     description: 'Daily nutrition and energy support',
@@ -188,7 +183,7 @@ export const medicines: Medicine[] = [
     rating: 4.5,
     inStock: true,
   },
-   {
+  {
     id: '13',
     name: 'Azithromycin 500mg',
     nameHi: 'एज़िथ्रोमाइसिन 500mg',
