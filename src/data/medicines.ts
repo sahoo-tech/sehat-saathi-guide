@@ -77,7 +77,6 @@ export const medicines: Medicine[] = [
     image: 'https://healwell-homeo.com/cdn/shop/files/Antiseptic_432x.jpg?v=1722318520',
     category: 'first-aid',
     rating: 4.7,
-   
     inStock: true,
   },
   {
@@ -106,8 +105,49 @@ export const medicines: Medicine[] = [
     rating: 4.5,
     inStock: true,
   },
+  
+
+  {
+    id: '9',
+    name: 'Dettol',
+    nameHi: 'डेटॉल',
+    description: 'antiseptic wound care , personal hygiene (bathing, shaving),',
+    descriptionHi: 'कटने-छिलने से संक्रमण रोकने',
+    price: 74.73,
+    originalPrice: 83.03,
+    image: 'https://assets.truemeds.in/Images/ProductImage/TM-LINT1-000371/dettol-antiseptic-liquid-125ml_dettol-antiseptic-liquid-125ml--TM-LINT1-000371_1.png?width=320',
+    category: 'first-aid',
+    rating: 4.6,
+    inStock: true,
+  },
   {
     id: '10',
+    name: 'Eno',
+    nameHi: 'ईनो',
+    description: 'Provides fast relief from acidity, heartburn',
+    descriptionHi: 'एसिडिटी, सीने की जलन,से तुरंत राहत ',
+    price: 9.23,
+    originalPrice: 10.31,
+    image: 'https://assets.truemeds.in/Images/ProductImage/TM-POER1-000736/eno-lemon-flavour-sachet-5gm_eno-lemon-flavour-sachet-5gm--TM-POER1-000736_1.png?width=320',
+    category: 'digestive',
+    rating: 4.6,
+    inStock: true,
+  },
+  {
+    id: '11',
+    name: 'Vicks Inhaler',
+    nameHi: 'विक्स इनहेलर',
+    description: 'provides fast, temporary relief from nasal congestion due to colds',
+    descriptionHi: 'बंद नाक से राहत  ',
+    price: 57.36,
+    originalPrice: 64,
+    image: 'https://assets.truemeds.in/Images/ProductImage/TM-INON1-000294/vicks-inhaler-0.5ml_vicks-inhaler-05ml--TM-INON1-000294_1.png?width=320',
+    category: 'cough-cold',
+    rating: 4.4,
+    inStock: true,
+  },
+  {
+    id: '10-2',
     name: 'Vitamin C Tablets',
     nameHi: 'विटामिन सी टैबलेट',
     description: 'For immunity and general health',
@@ -120,7 +160,7 @@ export const medicines: Medicine[] = [
     inStock: true,
   },
   {
-    id: '11',
+    id: '11-2',
     name: 'Multivitamin Capsules',
     nameHi: 'मल्टीविटामिन कैप्सूल',
     description: 'Daily nutrition and energy support',
@@ -145,7 +185,7 @@ export const medicines: Medicine[] = [
     rating: 4.5,
     inStock: true,
   },
-   {
+  {
     id: '13',
     name: 'Azithromycin 500mg',
     nameHi: 'एज़िथ्रोमाइसिन 500mg',

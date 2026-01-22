@@ -1,7 +1,10 @@
+import { createServer } from 'http';
 import app from "./app";
 import { env } from "./config/env";
 import { connectDB } from "./config/database";
 import logger from "./config/logger";
+import { initSocket } from "./config/socket";
+import { reminderWorker } from "./services/reminderWorker";
 
 const startServer = async () => {
   try {
@@ -10,18 +13,48 @@ const startServer = async () => {
     logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
     logger.info(`Node version: ${process.version}`);
 
-    // Connect to database
-    logger.info("Connecting to database...");
-    await connectDB();
-    logger.info("Database connected successfully");
+    // Try to connect to database (non-blocking)
+    logger.info("Attempting to connect to database...");
+    try {
+      await connectDB();
+      logger.info("Database connected successfully");
+    } catch (dbError) {
+      logger.warn("Database connection failed - some features may be unavailable");
+      logger.warn("Contact form will still work using JSON file storage");
+    }
+
+    // Create HTTP server
+    const httpServer = createServer(app);
+
+    // Initialize Socket.io
+    initSocket(httpServer);
+    logger.info("Socket.io initialized for WebRTC signaling and notifications");
+
+    // Start reminder worker
+    reminderWorker.start();
+    logger.info("Reminder worker started");
 
     // Start server
-    app.listen(env.PORT, () => {
+    httpServer.listen(env.PORT, () => {
       logger.info(`✓ Server running on http://localhost:${env.PORT}`);
       logger.info(`✓ Health check: http://localhost:${env.PORT}/health`);
       logger.info(`✓ Metrics endpoint: http://localhost:${env.PORT}/api/metrics`);
       logger.info("Server is ready to accept connections");
     });
+
+    // Graceful shutdown
+    const gracefullyShutdown = () => {
+      logger.info('Shutting down gracefully...');
+      reminderWorker.stop();
+      httpServer.close(() => {
+        logger.info('HTTP server closed');
+        process.exit(0);
+      });
+    };
+
+    process.on('SIGTERM', gracefullyShutdown);
+    process.on('SIGINT', gracefullyShutdown);
+
   } catch (error) {
     logger.error("Failed to start server:", error);
     process.exit(1);
@@ -44,17 +77,6 @@ process.on('unhandledRejection', (reason, promise) => {
     promise,
   });
   process.exit(1);
-});
-
-// Handle graceful shutdown
-process.on('SIGTERM', () => {
-  logger.info('SIGTERM signal received: closing HTTP server');
-  process.exit(0);
-});
-
-process.on('SIGINT', () => {
-  logger.info('SIGINT signal received: closing HTTP server');
-  process.exit(0);
 });
 
 startServer();
