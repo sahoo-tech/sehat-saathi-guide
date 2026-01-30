@@ -1,5 +1,6 @@
-
+﻿
 import React, { useState } from 'react';
+import { Bell, FlaskConical } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -39,6 +40,7 @@ import {
   Home,
   FileText
 } from 'lucide-react';
+import NotificationBell from '@/components/notifications/NotificationBell';
 
 const Navbar: React.FC = () => {
   const { t, language, setLanguage, languageNames, availableLanguages } = useLanguage();
@@ -63,11 +65,16 @@ const Navbar: React.FC = () => {
     { path: '/symptoms', label: t.symptomTracker, icon: Activity },
     { path: '/tips', label: t.healthTips, icon: Lightbulb },
     { path: '/store', label: t.medicineStore, icon: Store },
+    { path: '/caregivers', label: 'Care Circles', icon: Heart },
     { path: '/assistant', label: t.aiAssistant, icon: MessageCircle },
+    { path: '/analytics', label: 'Analytics', icon: Activity },
     { path: '/schemes', label: t.schemes, icon: Building },
     { path: '/nearby', label: t.nearbyHospitals, icon: MapPin },
     { path: '/reminders', label: 'Reminders', icon: '⏰' },
     { path: '/medical-history', label: 'Medical History', icon: FileText },
+    { path: '/lab-tests', label: 'Lab Tests', icon: FlaskConical },
+    { path: '/help', label: 'Help Center', icon: Lightbulb },
+
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -85,15 +92,15 @@ const Navbar: React.FC = () => {
     <nav className="sticky top-0 z-50 w-full bg-background shadow-sm dark:shadow-gray-800 transition-colors duration-300 border-b border-border">
       {/* Top Header Row */}
       <div className="border-b border-border/50">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
+        <div className="container mx-auto px-3 sm:px-4">
+          <div className="flex items-center justify-between h-14 sm:h-16">
             {/* Logo + Express Delivery */}
-            <div className="flex items-center gap-3">
-              <Link to="/" className="flex items-center gap-2 sm:gap-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-xl flex items-center justify-center shadow-md">
-                  <Heart className="w-5 h-5 sm:w-7 sm:h-7 text-primary-foreground" fill="currentColor" />
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Link to="/" className="flex items-center gap-1 sm:gap-2">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-primary rounded-lg sm:rounded-xl flex items-center justify-center shadow-md flex-shrink-0">
+                  <Heart className="w-4 h-4 sm:w-5 sm:h-5 md:w-7 md:h-7 text-primary-foreground" fill="currentColor" />
                 </div>
-                <span className="font-semibold text-base sm:text-xl text-foreground whitespace-nowrap hidden min-[370px]:block">
+                <span className="font-semibold text-xs sm:text-base md:text-xl text-foreground whitespace-nowrap hidden min-[400px]:block">
                   {language === 'en' ? 'Swasthya Saathi' : t.appName}
                 </span>
               </Link>
@@ -154,12 +161,15 @@ const Navbar: React.FC = () => {
                 variant="ghost"
                 size="icon"
                 onClick={toggleTheme}
-                className="hidden sm:flex"
+                className="flex" /*"hidden sm:flex" to flex done.#248*/
                 aria-label="Toggle theme"
               >
                 {isDark ? <Sun className="w-5 h-5 text-yellow-500" /> : <Moon className="w-5 h-5" />}
               </Button>
 
+
+              {/* Notifications */}
+              {isAuthenticated && <NotificationBell />}
 
               {/* Cart */}
               <Link to="/cart">
@@ -265,17 +275,19 @@ const Navbar: React.FC = () => {
                       {isDark ? 'Light Mode' : 'Dark Mode'}
                     </Button>
 
-                    {!isAuthenticated ? (
-                      <Link to="/auth" onClick={() => setIsOpen(false)} className="mt-4">
-                        <Button className="w-full">Log In / Sign Up</Button>
-                      </Link>
-                    ) : (
-                      <Button variant="ghost" className="w-full justify-start gap-4 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => { logout(); setIsOpen(false); }}>
-                        <LogOut className="w-5 h-5" />
-                        {t.logout}
-                      </Button>
-                    )}
+                    {
+                      !isAuthenticated ? (
+                        <Link to="/auth" onClick={() => setIsOpen(false)} className="mt-4">
+                          <Button className="w-full">Log In / Sign Up</Button>
+                        </Link>
+                      ) : (
+                        <Button variant="ghost" className="w-full justify-start gap-4 text-destructive hover:text-destructive hover:bg-destructive/10 mt-2" onClick={() => { logout(); setIsOpen(false); }}>
+                          <LogOut className="w-5 h-5" />
+                          {t.logout}
+                        </Button>
+                      )}
                   </div>
+
                 </SheetContent>
               </Sheet>
             </div>
@@ -286,7 +298,7 @@ const Navbar: React.FC = () => {
       {/* Desktop Navigation (Bottom Row) */}
       <div className="hidden lg:block bg-background/50 backdrop-blur-sm">
         <div className="container mx-auto px-4">
-          <div className="flex items-center gap-1 h-12 overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-1 h-12 overflow-hidden">
             {navItems.map((item) => {
               const active = isActive(item.path);
               const isStrIcon = typeof item.icon === 'string';
@@ -299,9 +311,12 @@ const Navbar: React.FC = () => {
                 >
                   <Button
                     variant="ghost"
-                    className={`gap-2 rounded-full px-4 h-9 ${active ? 'bg-secondary text-primary hover:bg-secondary/80' : 'text-muted-foreground hover:text-foreground'}`}
+                    className={`gap-1 rounded-full px-3 h-8 text-sm ${active ? 'bg-secondary text-primary hover:bg-secondary/80' : 'text-muted-foreground hover:text-foreground'}`}
                   >
-                    {isStrIcon ? <span>{item.icon as string}</span> : <Icon className={`w-4 h-4 ${active ? 'fill-current' : ''}`} />}
+                    {isStrIcon
+                      ? <span>{item.icon as string}</span>
+                      : <Icon className="w-3.5 h-3.5" />
+                    }
                     {item.label}
                   </Button>
                 </Link>
