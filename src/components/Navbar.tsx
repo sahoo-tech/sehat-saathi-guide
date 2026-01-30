@@ -238,8 +238,8 @@ const Navbar: React.FC = () => {
                     )}
 
                     {navItems.map((item) => {
-                      const Icon = typeof item.icon === 'string' ? Activity : item.icon;
                       const isStrIcon = typeof item.icon === 'string';
+                      const Icon = item.icon as React.ElementType;
 
                       return (
                         <Link key={item.path} to={item.path} onClick={() => setIsOpen(false)}>
@@ -247,7 +247,7 @@ const Navbar: React.FC = () => {
                             variant={isActive(item.path) ? 'secondary' : 'ghost'}
                             className={`w-full justify-start gap-4 h-11 ${isActive(item.path) ? 'font-semibold' : ''}`}
                           >
-                            {isStrIcon ? <span className="text-lg">{item.icon}</span> : <item.icon className="w-5 h-5" />}
+                            {isStrIcon ? <span className="text-lg">{item.icon as string}</span> : <Icon className="w-5 h-5" />}
                             {item.label}
                           </Button>
                         </Link>
@@ -270,7 +270,7 @@ const Navbar: React.FC = () => {
                         <Button className="w-full">Log In / Sign Up</Button>
                       </Link>
                     ) : (
-                      <Button variant="destructive" variant="ghost" className="w-full justify-start gap-4 text-destructive hover:text-destructive hover:bg-destructive/10 mt-2" onClick={() => { logout(); setIsOpen(false); }}>
+                      <Button variant="ghost" className="w-full justify-start gap-4 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => { logout(); setIsOpen(false); }}>
                         <LogOut className="w-5 h-5" />
                         {t.logout}
                       </Button>
@@ -289,8 +289,8 @@ const Navbar: React.FC = () => {
           <div className="flex items-center gap-1 h-12 overflow-x-auto no-scrollbar">
             {navItems.map((item) => {
               const active = isActive(item.path);
-              const Icon = typeof item.icon === 'string' ? Activity : item.icon;
               const isStrIcon = typeof item.icon === 'string';
+              const Icon = item.icon as React.ElementType;
 
               return (
                 <Link
@@ -301,7 +301,7 @@ const Navbar: React.FC = () => {
                     variant="ghost"
                     className={`gap-2 rounded-full px-4 h-9 ${active ? 'bg-secondary text-primary hover:bg-secondary/80' : 'text-muted-foreground hover:text-foreground'}`}
                   >
-                    {isStrIcon ? <span>{item.icon}</span> : <Icon className={`w-4 h-4 ${active ? 'fill-current' : ''}`} />}
+                    {isStrIcon ? <span>{item.icon as string}</span> : <Icon className={`w-4 h-4 ${active ? 'fill-current' : ''}`} />}
                     {item.label}
                   </Button>
                 </Link>
